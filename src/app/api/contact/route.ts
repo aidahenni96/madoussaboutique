@@ -1,6 +1,10 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
+if (!process.env.RESEND_API_KEY) {
+  throw new Error('La clé API Resend n\'est pas configurée. Veuillez ajouter RESEND_API_KEY dans vos variables d\'environnement.');
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
@@ -35,7 +39,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Erreur lors de l\'envoi de l\'email:', error);
     return NextResponse.json(
-      { error: 'Erreur lors de l\'envoi de l\'email' },
+      { error: 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer plus tard.' },
       { status: 500 }
     );
   }
