@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities; 
+@tailwind utilities;
+
+/* Styles globaux */
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Correction des styles des boutons et liens */
+button, a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Suppression des points indésirables */
+code {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+}
+
+/* Styles de base */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Styles pour les sections */
+section {
+  width: 100%;
+  overflow: hidden;
+} 

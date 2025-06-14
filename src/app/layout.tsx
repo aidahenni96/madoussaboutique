@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mon Site",
-  description: "Mon site web personnel",
+  title: "Aida Henni - Développeuse Full Stack",
+  description: "Création de boutiques en ligne et formation en développement web",
 };
 
 export default function RootLayout({
@@ -15,9 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
-      <body className={inter.className}>
-        {children}
+    <html lang="fr" className="h-full">
+      <body className={`${inter.className} h-full`}>
+        <Navigation />
+        <main className="pt-16">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
