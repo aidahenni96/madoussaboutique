@@ -74,7 +74,9 @@ export default function Formation() {
             className="bg-white rounded-lg shadow-lg p-6"
           >
             <div className="flex items-center mb-4">
-              <formation.icon className="text-3xl text-blue-600 mr-4" />
+              <div className="text-3xl text-blue-600 mr-4">
+                <formation.icon />
+              </div>
               <h2 className="text-2xl font-bold">{formation.title}</h2>
             </div>
             <p className="text-gray-600 mb-4">{formation.description}</p>

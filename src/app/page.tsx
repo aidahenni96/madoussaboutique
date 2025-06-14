@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { FaCode, FaShoppingCart, FaGraduationCap } from 'react-icons/fa';
 import Link from 'next/link';
+import IconWrapper from './components/IconWrapper';
 
 export default function Home() {
   return (
@@ -47,7 +48,7 @@ export default function Home() {
               className="bg-white p-6 rounded-lg shadow-lg"
             >
               <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                <FaShoppingCart className="w-6 h-6 text-blue-600" />
+                <IconWrapper Icon={FaShoppingCart} className="w-6 h-6 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Boutiques en Ligne</h3>
               <p className="text-gray-600 mb-4">
@@ -66,7 +67,7 @@ export default function Home() {
               className="bg-white p-6 rounded-lg shadow-lg"
             >
               <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                <FaCode className="w-6 h-6 text-purple-600" />
+                <IconWrapper Icon={FaCode} className="w-6 h-6 text-purple-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Développement Web</h3>
               <p className="text-gray-600 mb-4">
@@ -85,7 +86,7 @@ export default function Home() {
               className="bg-white p-6 rounded-lg shadow-lg"
             >
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-                <FaGraduationCap className="w-6 h-6 text-green-600" />
+                <IconWrapper Icon={FaGraduationCap} className="w-6 h-6 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Formations</h3>
               <p className="text-gray-600 mb-4">

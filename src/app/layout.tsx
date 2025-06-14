@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from './components/Navigation';
@@ -6,7 +5,7 @@ import Footer from './components/Footer';
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Aida Henni - Développeuse Full Stack",
   description: "Création de boutiques en ligne et formation en développement web",
 };
