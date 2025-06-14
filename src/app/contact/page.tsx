@@ -1,8 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
+import { useState } from 'react';
+import IconWrapper from '../components/IconWrapper';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -11,14 +12,38 @@ export default function Contact() {
     subject: '',
     message: ''
   });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Ici, vous pourrez ajouter la logique d'envoi du formulaire
-    console.log('Form submitted:', formData);
+    setStatus('loading');
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Une erreur est survenue');
+      }
+
+      setStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'Une erreur est survenue');
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -27,74 +52,87 @@ export default function Contact() {
   };
 
   return (
-    <main className="min-h-screen py-20">
-      <div className="container mx-auto px-4">
+    <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
         >
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Contactez-moi
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Contactez-moi</h1>
+          <p className="text-xl text-gray-600">
             Discutons de votre projet et voyons comment je peux vous aider
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Informations de contact */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold mb-6">Mes coordonnées</h2>
+            <div className="bg-white rounded-2xl shadow-xl p-8">
+              <h2 className="text-2xl font-semibold mb-6">Informations de contact</h2>
+              
               <div className="space-y-6">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
-                    <FaEnvelope size={20} color="#2563eb" />
+                    <IconWrapper Icon={FaEnvelope} className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">Email</h3>
-                    <p className="text-gray-600">contact@aidahenni.com</p>
+                    <h3 className="font-medium text-gray-900">Email</h3>
+                    <p className="text-gray-600">aidahenni96@icloud.com</p>
                   </div>
                 </div>
+
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mr-4">
-                    <FaPhone size={20} color="#9333ea" />
+                    <IconWrapper Icon={FaPhone} className="w-6 h-6 text-purple-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">Téléphone</h3>
+                    <h3 className="font-medium text-gray-900">Téléphone</h3>
                     <p className="text-gray-600">+33 6 XX XX XX XX</p>
                   </div>
                 </div>
+
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4">
-                    <FaMapMarkerAlt size={20} color="#16a34a" />
+                    <IconWrapper Icon={FaMapMarkerAlt} className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">Localisation</h3>
-                    <p className="text-gray-600">France</p>
+                    <h3 className="font-medium text-gray-900">Localisation</h3>
+                    <p className="text-gray-600">Paris, France</p>
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Formulaire de contact */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8">
-              <div className="space-y-6">
+            <div className="bg-white rounded-2xl shadow-xl p-8">
+              <h2 className="text-2xl font-semibold mb-6">Envoyez-moi un message</h2>
+              
+              {status === 'success' ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                  <p className="text-green-800">Votre message a été envoyé avec succès !</p>
+                </div>
+              ) : null}
+
+              {status === 'error' ? (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                  <p className="text-red-800">{errorMessage}</p>
+                </div>
+              ) : null}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                    Nom complet
+                    Nom
                   </label>
                   <input
                     type="text"
@@ -102,10 +140,11 @@ export default function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     Email
@@ -116,28 +155,26 @@ export default function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
                     Sujet
                   </label>
-                  <select
+                  <input
+                    type="text"
                     id="subject"
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
-                  >
-                    <option value="">Sélectionnez un sujet</option>
-                    <option value="boutique">Création de boutique en ligne</option>
-                    <option value="formation">Formation en développement web</option>
-                    <option value="autre">Autre</option>
-                  </select>
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
                 </div>
+
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
                     Message
@@ -147,19 +184,21 @@ export default function Contact() {
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
+                    required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
+
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+                  disabled={status === 'loading'}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Envoyer le message
+                  {status === 'loading' ? 'Envoi en cours...' : 'Envoyer le message'}
                 </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </motion.div>
         </div>
       </div>
